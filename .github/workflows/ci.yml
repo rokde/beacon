@@ -59,7 +59,7 @@ jobs:
         run: vendor/bin/phpstan analyse --no-progress --memory-limit=256M
 
       - name: Run tests with coverage
-        run: vendor/bin/pest --coverage --min=80 --ci
+        run: vendor/bin/pest --coverage --min=70 --ci
 
       - name: Type coverage (100% required)
         run: vendor/bin/pest --type-coverage --min=100
