@@ -53,10 +53,14 @@ analyse-baseline: ## Generate a new PHPStan baseline
 	./vendor/bin/phpstan analyse --generate-baseline --memory-limit=512M
 
 format: ## Auto-fix formatting (Pint)
-	./vendor/bin/pint
+	cd packages/core && ../../vendor/bin/pint
+	cd packages/recorder && ../../vendor/bin/pint
+	cd packages/dashboard && ../../vendor/bin/pint
 
 format-check: ## Check formatting without fixing (Pint --test)
-	./vendor/bin/pint --test
+	cd packages/core && ../../vendor/bin/pint --test
+	cd packages/recorder && ../../vendor/bin/pint --test
+	cd packages/dashboard && ../../vendor/bin/pint --test
 
 refactor: ## Apply Rector refactorings
 	./vendor/bin/rector process
