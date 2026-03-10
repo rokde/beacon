@@ -14,9 +14,9 @@ final class AggregateAllKpisCommand extends Command
 
     protected $description = 'Dispatch aggregation jobs for all registered KPIs (run by scheduler)';
 
-    public function handle(KpiRegistry $registry): int
+    public function handle(KpiRegistry $kpiRegistry): int
     {
-        $definitions = $registry->withRecorderConfig();
+        $definitions = $kpiRegistry->withRecorderConfig();
 
         if ($definitions === []) {
             $this->warn('No KPI definitions with recorder config found.');

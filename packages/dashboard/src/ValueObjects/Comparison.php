@@ -14,12 +14,12 @@ use DateTimeImmutable;
  *   Comparison::offset('-1 week')        → shift start/end by 1 week
  *   Comparison::offset('-3 days', '3 days') → 3-day window, 3 days prior
  */
-final class Comparison
+final readonly class Comparison
 {
     private function __construct(
-        public readonly string $label,
-        public readonly string $offset,
-        public readonly ?string $window,
+        public string $label,
+        public string $offset,
+        public ?string $window,
     ) {}
 
     public static function previousPeriod(): self
@@ -34,7 +34,7 @@ final class Comparison
     public static function offset(string $offset, ?string $window = null): self
     {
         return new self(
-            label: "vs. {$offset}",
+            label: 'vs. '.$offset,
             offset: $offset,
             window: $window,
         );
@@ -51,14 +51,14 @@ final class Comparison
             $windowSeconds = $currentTo->getTimestamp() - $currentFrom->getTimestamp();
 
             return [
-                'from' => $currentFrom->modify("-{$windowSeconds} seconds"),
-                'to' => $currentTo->modify("-{$windowSeconds} seconds"),
+                'from' => $currentFrom->modify(sprintf('-%d seconds', $windowSeconds)),
+                'to' => $currentTo->modify(sprintf('-%d seconds', $windowSeconds)),
             ];
         }
 
         $compFrom = $currentFrom->modify($this->offset);
         $compTo = $this->window !== null
-            ? $compFrom->modify("+{$this->window}")
+            ? $compFrom->modify('+'.$this->window)
             : $currentTo->modify($this->offset);
 
         return ['from' => $compFrom, 'to' => $compTo];

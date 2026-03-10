@@ -11,9 +11,9 @@ final class DashboardRegistry
     /** @var array<string, DashboardDefinition> keyed by dashboard id */
     private array $dashboards = [];
 
-    public function register(DashboardDefinition $dashboard): void
+    public function register(DashboardDefinition $dashboardDefinition): void
     {
-        $this->dashboards[$dashboard->id] = $dashboard;
+        $this->dashboards[$dashboardDefinition->id] = $dashboardDefinition;
     }
 
     public function get(string $id): ?DashboardDefinition

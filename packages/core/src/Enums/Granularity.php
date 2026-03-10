@@ -68,7 +68,7 @@ enum Granularity: string
                 $daysToMonday = $dayOfWeek - 1;
 
                 return $datetime
-                    ->modify("-{$daysToMonday} days")
+                    ->modify(sprintf('-%s days', $daysToMonday))
                     ->setTime(0, 0, 0);
             })(),
 

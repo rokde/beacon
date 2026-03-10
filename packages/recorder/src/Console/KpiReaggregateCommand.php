@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Beacon\Recorder\Console;
 
+use Beacon\Core\ValueObjects\KpiDefinition;
 use Beacon\Recorder\Jobs\AggregateKpiJob;
 use Beacon\Recorder\Services\KpiRegistry;
 use Illuminate\Console\Command;
@@ -17,20 +18,20 @@ final class KpiReaggregateCommand extends Command
 
     protected $description = 'Manually re-aggregate a KPI (use after queue outage or data correction)';
 
-    public function handle(KpiRegistry $registry): int
+    public function handle(KpiRegistry $kpiRegistry): int
     {
         $kpiKey = $this->argument('kpi');
-        $definition = $registry->get($kpiKey);
+        $definition = $kpiRegistry->get($kpiKey);
 
-        if ($definition === null) {
-            $this->error("KPI [{$kpiKey}] is not registered.");
+        if (! $definition instanceof KpiDefinition) {
+            $this->error(sprintf('KPI [%s] is not registered.', $kpiKey));
 
             return self::FAILURE;
         }
 
         if ($this->option('sync')) {
-            $this->info("Re-aggregating [{$kpiKey}] synchronously...");
-            (new AggregateKpiJob($kpiKey))->handle($registry);
+            $this->info(sprintf('Re-aggregating [%s] synchronously...', $kpiKey));
+            new AggregateKpiJob($kpiKey)->handle($kpiRegistry);
             $this->info('✓ Done.');
 
             return self::SUCCESS;
@@ -42,7 +43,7 @@ final class KpiReaggregateCommand extends Command
             ->onConnection(is_string($queueConnection) ? $queueConnection : null)
             ->onQueue(is_string($queueName) ? $queueName : null);
 
-        $this->info("Dispatched re-aggregation job for [{$kpiKey}].");
+        $this->info(sprintf('Dispatched re-aggregation job for [%s].', $kpiKey));
 
         return self::SUCCESS;
     }

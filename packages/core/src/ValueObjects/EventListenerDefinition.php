@@ -10,17 +10,17 @@ namespace Beacon\Core\ValueObjects;
  *
  * @phpstan-type Extractor callable(object): (int|float)
  */
-final class EventListenerDefinition
+final readonly class EventListenerDefinition
 {
     /** @var callable(object): (float|int) */
-    public readonly mixed $extractor;
+    public mixed $extractor;
 
     /**
      * @param  class-string  $eventClass  Fully qualified event class name
      * @param  callable(object): (float|int)  $extractor  Extracts the value from the event
      */
     public function __construct(
-        public readonly string $eventClass,
+        public string $eventClass,
         mixed $extractor,
     ) {
         $this->extractor = $extractor;

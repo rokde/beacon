@@ -30,7 +30,7 @@ final class DashboardDefinition
         private int $refreshInterval = 300,
     ) {
         $this->label = $id;
-        $this->path = "/{$id}";
+        $this->path = '/'.$id;
     }
 
     public static function make(string $id): self
@@ -113,7 +113,7 @@ final class DashboardDefinition
 
     public function isAuthorized(mixed $user): bool
     {
-        if ($this->authCallback === null) {
+        if (! $this->authCallback instanceof \Closure) {
             return true;
         }
 

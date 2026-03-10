@@ -63,10 +63,14 @@ format-check: ## Check formatting without fixing (Pint --test)
 	cd packages/dashboard && ../../vendor/bin/pint --test
 
 refactor: ## Apply Rector refactorings
-	./vendor/bin/rector process
+	cd packages/core && ../../vendor/bin/rector process
+	cd packages/recorder && ../../vendor/bin/rector process
+	cd packages/dashboard && ../../vendor/bin/rector process
 
 refactor-check: ## Dry-run Rector (show changes without applying)
-	./vendor/bin/rector process --dry-run
+	cd packages/core && ../../vendor/bin/rector process --dry-run
+	cd packages/recorder && ../../vendor/bin/rector process --dry-run
+	cd packages/dashboard && ../../vendor/bin/rector process --dry-run
 
 # ── Frontend Quality ──────────────────────────────────────────────────────────
 

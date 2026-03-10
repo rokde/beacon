@@ -19,6 +19,7 @@ use Illuminate\Support\ServiceProvider;
 
 final class RecorderServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -34,15 +35,15 @@ final class RecorderServiceProvider extends ServiceProvider
         $this->app->singleton(
             KpiRecorderContract::class,
             function (): KpiRecorderContract {
-                /** @var KpiRegistry $registry */
-                $registry = $this->app->make(KpiRegistry::class);
-                /** @var KpiWriteBuffer $buffer */
-                $buffer = $this->app->make(KpiWriteBuffer::class);
+                /** @var KpiRegistry $kpiRegistry */
+                $kpiRegistry = $this->app->make(KpiRegistry::class);
+                /** @var KpiWriteBuffer $kpiWriteBuffer */
+                $kpiWriteBuffer = $this->app->make(KpiWriteBuffer::class);
 
                 return new KpiRecorderService(
-                    registry: $registry,
-                    buffer: $buffer,
-                    app: $this->app,
+                    kpiRegistry: $kpiRegistry,
+                    kpiWriteBuffer: $kpiWriteBuffer,
+                    application: $this->app,
                 );
             },
         );
@@ -73,8 +74,8 @@ final class RecorderServiceProvider extends ServiceProvider
 
     private function registerEventListeners(): void
     {
-        /** @var KpiRegistry $registry */
-        $registry = $this->app->make(KpiRegistry::class);
+        /** @var KpiRegistry $kpiRegistry */
+        $kpiRegistry = $this->app->make(KpiRegistry::class);
 
         // Track which (eventClass, kpiKey) pairs have already been registered
         // to avoid duplicate listeners when a definition is re-registered.
@@ -83,13 +84,13 @@ final class RecorderServiceProvider extends ServiceProvider
 
         $app = $this->app;
 
-        $registerListenersForDefinition = function (KpiDefinition $definition) use ($app, &$registered): void {
-            if (! $definition->hasRecorderConfig()) {
+        $registerListenersForDefinition = function (KpiDefinition $kpiDefinition) use ($app, &$registered): void {
+            if (! $kpiDefinition->hasRecorderConfig()) {
                 return;
             }
 
-            foreach ($definition->getEventListeners() as $listenerDef) {
-                $registrationKey = $listenerDef->eventClass.'|'.(string) $definition->key();
+            foreach ($kpiDefinition->getEventListeners() as $eventListenerDefinition) {
+                $registrationKey = $eventListenerDefinition->eventClass.'|'.$kpiDefinition->key();
 
                 if (isset($registered[$registrationKey])) {
                     continue;
@@ -97,35 +98,35 @@ final class RecorderServiceProvider extends ServiceProvider
 
                 $registered[$registrationKey] = true;
 
-                $kpiKey = (string) $definition->key();
-                $extractor = $listenerDef->extractor;
+                $kpiKey = (string) $kpiDefinition->key();
+                $extractor = $eventListenerDefinition->extractor;
 
                 // Resolve the recorder from the container at dispatch time so
                 // that KPI::fake() (which swaps the binding) is honoured even
                 // when event listeners were registered before the fake was set.
                 Event::listen(
-                    $listenerDef->eventClass,
+                    $eventListenerDefinition->eventClass,
                     function (object $event) use ($app, $kpiKey, $extractor): void {
-                        $recorder = $app->make(KpiRecorderContract::class);
-                        $listener = new KpiEventListener(
-                            recorder: $recorder,
+                        $kpiRecorderContract = $app->make(KpiRecorderContract::class);
+                        $kpiEventListener = new KpiEventListener(
+                            kpiRecorderContract: $kpiRecorderContract,
                             kpiKey: $kpiKey,
                             extractor: $extractor,
                         );
-                        $listener->handle($event);
+                        $kpiEventListener->handle($event);
                     },
                 );
             }
         };
 
         // Register listeners for definitions already in the registry at boot time
-        foreach ($registry->withRecorderConfig() as $definition) {
-            $registerListenersForDefinition($definition);
+        foreach ($kpiRegistry->withRecorderConfig() as $kpiDefinition) {
+            $registerListenersForDefinition($kpiDefinition);
         }
 
         // Also register listeners for definitions added after boot (e.g. in tests
         // or from service providers that boot after RecorderServiceProvider)
-        $registry->onRegister($registerListenersForDefinition);
+        $kpiRegistry->onRegister($registerListenersForDefinition);
     }
 
     private function registerScheduler(): void
@@ -135,7 +136,7 @@ final class RecorderServiceProvider extends ServiceProvider
             $interval = is_int($rawInterval) ? $rawInterval : 5;
 
             $schedule->command(AggregateAllKpisCommand::class)
-                ->cron("*/{$interval} * * * *")
+                ->cron(sprintf('*/%d * * * *', $interval))
                 ->withoutOverlapping()
                 ->onOneServer()
                 ->runInBackground();

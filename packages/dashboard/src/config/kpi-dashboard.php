@@ -27,7 +27,7 @@ return [
     | Base URL for beacon's compiled CSS/JS assets.
     | Default: uses Laravel's asset() helper pointing to /vendor/beacon/
     */
-    'asset_url' => env('KPI_ASSET_URL', null),
+    'asset_url' => env('KPI_ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------

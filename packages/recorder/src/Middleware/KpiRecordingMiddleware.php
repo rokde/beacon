@@ -8,7 +8,6 @@ use Beacon\Recorder\Jobs\RecordKpiEventJob;
 use Beacon\Recorder\Services\KpiWriteBuffer;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
@@ -26,10 +25,10 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
  *       $middleware->append(\Beacon\Recorder\Middleware\KpiRecordingMiddleware::class);
  *   })
  */
-final class KpiRecordingMiddleware
+final readonly class KpiRecordingMiddleware
 {
     public function __construct(
-        private readonly KpiWriteBuffer $buffer,
+        private KpiWriteBuffer $kpiWriteBuffer,
     ) {}
 
     public function handle(Request $request, Closure $next): SymfonyResponse
@@ -40,13 +39,13 @@ final class KpiRecordingMiddleware
         return $response;
     }
 
-    public function terminate(Request $request, SymfonyResponse $response): void
+    public function terminate(): void
     {
-        if ($this->buffer->isEmpty()) {
+        if ($this->kpiWriteBuffer->isEmpty()) {
             return;
         }
 
-        foreach ($this->buffer->flush() as $item) {
+        foreach ($this->kpiWriteBuffer->flush() as $item) {
             $queueConnection = config('kpi-recorder.queue_connection');
             $queueName = config('kpi-recorder.queue_name');
             RecordKpiEventJob::dispatch(

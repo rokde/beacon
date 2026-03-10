@@ -7,14 +7,14 @@ namespace Beacon\Core\ValueObjects;
 use Beacon\Core\Exceptions\InvalidKpiKeyException;
 use Stringable;
 
-final class KpiKey implements Stringable
+final readonly class KpiKey implements Stringable
 {
     private const int MAX_LENGTH = 64;
 
     private const string PATTERN = '/^[a-zA-Z0-9_-]+$/';
 
     private function __construct(
-        private readonly string $value,
+        private string $value,
     ) {}
 
     public static function fromString(string $key): self

@@ -27,8 +27,8 @@ final class KpiDefinition
     private array $granularities;
 
     private function __construct(
-        private readonly KpiKey $key,
-        private ?KpiType $type = null,
+        private readonly KpiKey $kpiKey,
+        private ?KpiType $kpiType = null,
         private int $retentionDays = 30,
         private Freshness $freshness = Freshness::Aggregate,
     ) {
@@ -42,7 +42,7 @@ final class KpiDefinition
     public static function make(KpiKey|string $key): self
     {
         return new self(
-            key: $key instanceof KpiKey ? $key : KpiKey::fromString($key),
+            kpiKey: $key instanceof KpiKey ? $key : KpiKey::fromString($key),
         );
     }
 
@@ -50,10 +50,10 @@ final class KpiDefinition
     // Recorder aspects — fluent setters (immutable)
     // -------------------------------------------------------------------------
 
-    public function type(KpiType $type): self
+    public function type(KpiType $kpiType): self
     {
         $clone = clone $this;
-        $clone->type = $type;
+        $clone->kpiType = $kpiType;
 
         return $clone;
     }
@@ -111,12 +111,12 @@ final class KpiDefinition
 
     public function key(): KpiKey
     {
-        return $this->key;
+        return $this->kpiKey;
     }
 
     public function getType(): ?KpiType
     {
-        return $this->type;
+        return $this->kpiType;
     }
 
     /**
@@ -150,7 +150,7 @@ final class KpiDefinition
      */
     public function hasRecorderConfig(): bool
     {
-        return $this->type !== null;
+        return $this->kpiType instanceof KpiType;
     }
 
     // -------------------------------------------------------------------------

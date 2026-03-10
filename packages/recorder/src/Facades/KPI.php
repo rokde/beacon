@@ -30,9 +30,9 @@ final class KPI extends Facade
      */
     public static function fake(): KpiFake
     {
-        $fake = new KpiFake;
-        self::swap($fake);
+        $kpiFake = new KpiFake;
+        self::swap($kpiFake);
 
-        return $fake;
+        return $kpiFake;
     }
 }

@@ -24,17 +24,17 @@ use Illuminate\Contracts\Foundation\Application;
  *  │ CLI / Queue worker / Test   │ any              │ Dispatch job directly   │
  *  └─────────────────────────────┴──────────────────┴─────────────────────────┘
  */
-final class KpiRecorderService implements KpiRecorderContract
+final readonly class KpiRecorderService implements KpiRecorderContract
 {
     public function __construct(
-        private readonly KpiRegistry $registry,
-        private readonly KpiWriteBuffer $buffer,
-        private readonly Application $app,
+        private KpiRegistry $kpiRegistry,
+        private KpiWriteBuffer $kpiWriteBuffer,
+        private Application $application,
     ) {}
 
-    public function register(KpiDefinition $definition): void
+    public function register(KpiDefinition $kpiDefinition): void
     {
-        $this->registry->register($definition);
+        $this->kpiRegistry->register($kpiDefinition);
     }
 
     /**
@@ -45,7 +45,7 @@ final class KpiRecorderService implements KpiRecorderContract
         $recordedAt = new DateTimeImmutable;
 
         if ($this->shouldBuffer()) {
-            $this->buffer->push($kpiKey, $value, $recordedAt, $meta);
+            $this->kpiWriteBuffer->push($kpiKey, $value, $recordedAt, $meta);
 
             return;
         }
@@ -59,12 +59,12 @@ final class KpiRecorderService implements KpiRecorderContract
 
     public function definitions(): array
     {
-        return $this->registry->all();
+        return $this->kpiRegistry->all();
     }
 
     public function definition(string $kpiKey): ?KpiDefinition
     {
-        return $this->registry->get($kpiKey);
+        return $this->kpiRegistry->get($kpiKey);
     }
 
     /**
@@ -82,7 +82,7 @@ final class KpiRecorderService implements KpiRecorderContract
 
     private function isHttpContext(): bool
     {
-        return $this->app->runningInConsole() === false;
+        return $this->application->runningInConsole() === false;
     }
 
     private function isSyncQueue(): bool

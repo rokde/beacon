@@ -7,22 +7,23 @@ namespace Beacon\Dashboard\Http\Controllers;
 use Beacon\Core\Enums\Freshness;
 use Beacon\Dashboard\Services\DashboardRegistry;
 use Beacon\Dashboard\Services\QueryEngine;
+use Beacon\Dashboard\ValueObjects\DashboardDefinition;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
-final class DashboardController
+final readonly class DashboardController
 {
     public function __construct(
-        private readonly DashboardRegistry $registry,
-        private readonly QueryEngine $query,
+        private DashboardRegistry $dashboardRegistry,
+        private QueryEngine $queryEngine,
     ) {}
 
     public function show(Request $request, string $path = ''): SymfonyResponse
     {
         $normalizedPath = '/'.ltrim($path, '/');
-        $dashboard = $this->registry->findByPath($normalizedPath);
+        $dashboard = $this->dashboardRegistry->findByPath($normalizedPath);
 
-        if ($dashboard === null) {
+        if (! $dashboard instanceof DashboardDefinition) {
             abort(404);
         }
 
@@ -34,9 +35,9 @@ final class DashboardController
 
         $tilesData = [];
 
-        foreach ($dashboard->getTiles() as $tile) {
+        foreach ($dashboard->getTiles() as $tileDefinition) {
             $freshness = Freshness::Aggregate; // TODO: read from KpiDefinition when beacon/recorder is present
-            $tilesData[$tile->kpiKey] = $this->query->queryForTile($tile, $freshness);
+            $tilesData[$tileDefinition->kpiKey] = $this->queryEngine->queryForTile($tileDefinition, $freshness);
         }
 
         // Partial refresh (polling) — return only the grid HTML

@@ -34,7 +34,7 @@ final class ForecastEngine
 
         // Compute residual standard deviation for confidence intervals
         $residuals = array_map(
-            fn (int $i, float $y) => $y - ($slope * $i + $intercept),
+            fn (int $i, float $y): float => $y - ($slope * $i + $intercept),
             $xs,
             $ys,
         );
@@ -54,7 +54,7 @@ final class ForecastEngine
         for ($i = 1; $i <= $steps; $i++) {
             $x = $n - 1 + $i;
             $value = $slope * $x + $intercept;
-            $date = $lastDate->modify("+{$i} {$stepModifier}");
+            $date = $lastDate->modify(sprintf('+%d %s', $i, $stepModifier));
 
             $lower = $residualStd > 0 ? $value - $z * $residualStd * sqrt($i) : null;
             $upper = $residualStd > 0 ? $value + $z * $residualStd * sqrt($i) : null;

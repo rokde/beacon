@@ -23,9 +23,9 @@ final class KpiFake implements KpiRecorderContract
     /** @var array<string, KpiDefinition> */
     private array $definitions = [];
 
-    public function register(KpiDefinition $definition): void
+    public function register(KpiDefinition $kpiDefinition): void
     {
-        $this->definitions[(string) $definition->key()] = $definition;
+        $this->definitions[(string) $kpiDefinition->key()] = $kpiDefinition;
     }
 
     /**
@@ -59,12 +59,12 @@ final class KpiFake implements KpiRecorderContract
     {
         $matches = array_filter(
             $this->recorded,
-            fn (array $r) => $r['kpiKey'] === $kpiKey && (float) $r['value'] === (float) $value,
+            fn (array $r): bool => $r['kpiKey'] === $kpiKey && (float) $r['value'] === (float) $value,
         );
 
         Assert::assertNotEmpty(
             $matches,
-            "Expected KPI [{$kpiKey}] to be recorded with value [{$value}], but it was not.",
+            sprintf('Expected KPI [%s] to be recorded with value [%s], but it was not.', $kpiKey, $value),
         );
     }
 
@@ -72,12 +72,12 @@ final class KpiFake implements KpiRecorderContract
     {
         $matches = array_filter(
             $this->recorded,
-            fn (array $r) => $r['kpiKey'] === $kpiKey,
+            fn (array $r): bool => $r['kpiKey'] === $kpiKey,
         );
 
         Assert::assertEmpty(
             $matches,
-            "Expected KPI [{$kpiKey}] to not be recorded, but it was recorded ".count($matches).' time(s).',
+            sprintf('Expected KPI [%s] to not be recorded, but it was recorded ', $kpiKey).count($matches).' time(s).',
         );
     }
 
@@ -85,13 +85,13 @@ final class KpiFake implements KpiRecorderContract
     {
         $matches = array_filter(
             $this->recorded,
-            fn (array $r) => $r['kpiKey'] === $kpiKey,
+            fn (array $r): bool => $r['kpiKey'] === $kpiKey,
         );
 
         Assert::assertCount(
             $times,
             $matches,
-            "Expected KPI [{$kpiKey}] to be recorded {$times} time(s), but was recorded ".count($matches).' time(s).',
+            sprintf('Expected KPI [%s] to be recorded %d time(s), but was recorded ', $kpiKey, $times).count($matches).' time(s).',
         );
     }
 

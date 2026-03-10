@@ -12,7 +12,7 @@ interface KpiRecorderContract
      * Register a KpiDefinition for tracking.
      * Called from the host app's KpiServiceProvider.
      */
-    public function register(KpiDefinition $definition): void;
+    public function register(KpiDefinition $kpiDefinition): void;
 
     /**
      * Record a KPI value directly (Option A — explicit call).

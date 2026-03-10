@@ -23,7 +23,7 @@ final class KpiEventListener
      * @param  callable(object): (float|int)  $extractor
      */
     public function __construct(
-        private readonly KpiRecorderContract $recorder,
+        private readonly KpiRecorderContract $kpiRecorderContract,
         private readonly string $kpiKey,
         callable $extractor,
     ) {
@@ -33,6 +33,6 @@ final class KpiEventListener
     public function handle(object $event): void
     {
         $value = ($this->extractor)($event);
-        $this->recorder->record($this->kpiKey, $value);
+        $this->kpiRecorderContract->record($this->kpiKey, $value);
     }
 }

@@ -6,7 +6,6 @@ namespace Beacon\Dashboard\Services;
 
 use Beacon\Core\Enums\Freshness;
 use Beacon\Core\Enums\Granularity;
-use Beacon\Dashboard\ValueObjects\Comparison;
 use Beacon\Dashboard\ValueObjects\TileDefinition;
 use DateTimeImmutable;
 use Illuminate\Support\Facades\Cache;
@@ -17,10 +16,10 @@ use Illuminate\Support\Facades\DB;
  * computes comparisons, applies forecast, and returns a structured array
  * ready for Blade rendering.
  */
-final class QueryEngine
+final readonly class QueryEngine
 {
     public function __construct(
-        private readonly ForecastEngine $forecast,
+        private ForecastEngine $forecastEngine,
     ) {}
 
     /**
@@ -35,15 +34,15 @@ final class QueryEngine
      *     is_realtime: bool,
      * }
      */
-    public function queryForTile(TileDefinition $tile, Freshness $freshness): array
+    public function queryForTile(TileDefinition $tileDefinition, Freshness $freshness): array
     {
         $rawConnection = config('kpi-dashboard.connection', 'kpi');
         $connection = is_string($rawConnection) ? $rawConnection : 'kpi';
-        $cacheKey = "beacon.tile.{$tile->kpiKey}.{$tile->getGranularity()->value}.{$tile->getPeriodDays()}";
+        $cacheKey = sprintf('beacon.tile.%s.%s.%d', $tileDefinition->kpiKey, $tileDefinition->getGranularity()->value, $tileDefinition->getPeriodDays());
         $rawInterval = config('kpi-recorder.aggregation_interval', 5);
         $cacheTtl = $freshness->isRealtime() ? 0 : (is_int($rawInterval) ? $rawInterval : 5) * 60;
 
-        $query = fn (): array => $this->executeQuery($tile, $connection, $freshness);
+        $query = fn (): array => $this->executeQuery($tileDefinition, $connection, $freshness);
 
         if ($cacheTtl > 0) {
             /** @var array{current_value: float, previous_value: float|null, trend_direction: 'down'|'neutral'|'up', trend_pct: float|null, comparison_label: string|null, series: list<array{period_start: string, value: float, count: int}>, forecast: list<array{date: string, value: float, lower: float|null, upper: float|null}>, is_realtime: bool} $result */
@@ -58,23 +57,23 @@ final class QueryEngine
     /**
      * @return array{current_value: float, previous_value: float|null, trend_direction: 'down'|'neutral'|'up', trend_pct: float|null, comparison_label: string|null, series: list<array{period_start: string, value: float, count: int}>, forecast: list<array{date: string, value: float, lower: float|null, upper: float|null}>, is_realtime: bool}
      */
-    private function executeQuery(TileDefinition $tile, string $connection, Freshness $freshness): array
+    private function executeQuery(TileDefinition $tileDefinition, string $connection, Freshness $freshness): array
     {
         $now = new DateTimeImmutable;
-        $from = $now->modify("-{$tile->getPeriodDays()} days");
+        $from = $now->modify(sprintf('-%d days', $tileDefinition->getPeriodDays()));
 
-        $series = $this->fetchSeries($tile->kpiKey, $tile->getGranularity(), $from, $now, $connection);
+        $series = $this->fetchSeries($tileDefinition->kpiKey, $tileDefinition->getGranularity(), $from, $now, $connection);
 
         $currentValue = (float) collect($series)->sum('value');
         $previousValue = null;
         $comparisonLabel = null;
 
         // First comparison drives the trend indicator
-        $firstComparison = $tile->getComparisons()[0] ?? null;
+        $firstComparison = $tileDefinition->getComparisons()[0] ?? null;
 
         if ($firstComparison !== null) {
             ['from' => $compFrom, 'to' => $compTo] = $firstComparison->resolve($from, $now);
-            $prevSeries = $this->fetchSeries($tile->kpiKey, $tile->getGranularity(), $compFrom, $compTo, $connection);
+            $prevSeries = $this->fetchSeries($tileDefinition->kpiKey, $tileDefinition->getGranularity(), $compFrom, $compTo, $connection);
             $previousValue = (float) collect($prevSeries)->sum('value');
             $comparisonLabel = $firstComparison->label;
         }
@@ -94,11 +93,11 @@ final class QueryEngine
 
         $forecastPoints = [];
 
-        if ($tile->hasForecast()) {
-            $forecastPoints = $this->forecast->compute(
+        if ($tileDefinition->hasForecast()) {
+            $forecastPoints = $this->forecastEngine->compute(
                 $series,
-                $tile->getForecastHorizon(),
-                $tile->getGranularity(),
+                $tileDefinition->getForecastHorizon(),
+                $tileDefinition->getGranularity(),
             );
         }
 
@@ -136,13 +135,11 @@ final class QueryEngine
             ->get(['period_start', 'value', 'count']);
 
         /** @var list<array{period_start: string, value: float, count: int}> $result */
-        $result = array_values($rows->map(function (object $row): array {
-            return [
-                'period_start' => (string) $row->period_start,  // @phpstan-ignore-line
-                'value' => (float) $row->value,           // @phpstan-ignore-line
-                'count' => (int) $row->count,             // @phpstan-ignore-line
-            ];
-        })->all());
+        $result = array_values($rows->map(fn (object $row): array => [
+            'period_start' => (string) $row->period_start,  // @phpstan-ignore-line
+            'value' => (float) $row->value,           // @phpstan-ignore-line
+            'count' => (int) $row->count,             // @phpstan-ignore-line
+        ])->all());
 
         return $result;
     }

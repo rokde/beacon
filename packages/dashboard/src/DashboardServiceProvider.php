@@ -15,6 +15,7 @@ use Illuminate\Support\ServiceProvider;
 
 final class DashboardServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -27,11 +28,11 @@ final class DashboardServiceProvider extends ServiceProvider
         $this->app->singleton(ForecastEngine::class);
 
         $this->app->singleton(QueryEngine::class, function (): QueryEngine {
-            /** @var ForecastEngine $forecast */
-            $forecast = $this->app->make(ForecastEngine::class);
+            /** @var ForecastEngine $forecastEngine */
+            $forecastEngine = $this->app->make(ForecastEngine::class);
 
             return new QueryEngine(
-                forecast: $forecast,
+                forecastEngine: $forecastEngine,
             );
         });
     }
@@ -102,13 +103,11 @@ final class DashboardServiceProvider extends ServiceProvider
 
     private function registerGates(): void
     {
-        $this->callAfterResolving('gate', function () {
-            $registry = $this->app->make(DashboardRegistry::class);
+        $this->callAfterResolving('gate', function (): void {
+            $dashboardRegistry = $this->app->make(DashboardRegistry::class);
 
-            foreach ($registry->all() as $dashboard) {
-                Gate::define("beacon.view.{$dashboard->id}", function (?Authenticatable $user) use ($dashboard): bool {
-                    return $dashboard->isAuthorized($user);
-                });
+            foreach ($dashboardRegistry->all() as $dashboardDefinition) {
+                Gate::define('beacon.view.'.$dashboardDefinition->id, fn (?Authenticatable $authenticatable): bool => $dashboardDefinition->isAuthorized($authenticatable));
             }
         });
     }

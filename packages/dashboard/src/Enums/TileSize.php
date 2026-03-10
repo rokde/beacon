@@ -12,7 +12,7 @@ enum TileSize: string
 
     public function cssClass(): string
     {
-        return "beacon-tile--{$this->value}";
+        return 'beacon-tile--'.$this->value;
     }
 
     /** Grid column span hint for the layout */

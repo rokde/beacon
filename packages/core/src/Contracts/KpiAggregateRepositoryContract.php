@@ -17,7 +17,7 @@ interface KpiAggregateRepositoryContract
      * @param  array<string, mixed>  $meta
      */
     public function upsert(
-        KpiKey $key,
+        KpiKey $kpiKey,
         Granularity $granularity,
         DateTimeImmutable $periodStart,
         float $value,
@@ -31,7 +31,7 @@ interface KpiAggregateRepositoryContract
      * @return list<object{period_start: string, value: float, count: int, meta: string}>
      */
     public function query(
-        KpiKey $key,
+        KpiKey $kpiKey,
         Granularity $granularity,
         DateTimeImmutable $from,
         DateTimeImmutable $to,
@@ -40,5 +40,5 @@ interface KpiAggregateRepositoryContract
     /**
      * Get the most recent period_start for which an aggregate exists.
      */
-    public function latestPeriodStart(KpiKey $key, Granularity $granularity): ?DateTimeImmutable;
+    public function latestPeriodStart(KpiKey $kpiKey, Granularity $granularity): ?DateTimeImmutable;
 }

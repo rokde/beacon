@@ -12,15 +12,15 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::connection($this->connection)->create('kpi_events', function (Blueprint $table) {
-            $table->id();
-            $table->string('kpi_key', 64)->index();
-            $table->decimal('value', 20, 6);
-            $table->timestamp('recorded_at')->useCurrent();
-            $table->json('meta')->nullable();
+        Schema::connection($this->connection)->create('kpi_events', function (Blueprint $blueprint): void {
+            $blueprint->id();
+            $blueprint->string('kpi_key', 64)->index();
+            $blueprint->decimal('value', 20, 6);
+            $blueprint->timestamp('recorded_at')->useCurrent();
+            $blueprint->json('meta')->nullable();
 
             // Composite index for fast aggregation queries
-            $table->index(['kpi_key', 'recorded_at'], 'kpi_events_key_recorded_at');
+            $blueprint->index(['kpi_key', 'recorded_at'], 'kpi_events_key_recorded_at');
         });
     }
 

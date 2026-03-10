@@ -35,12 +35,12 @@ final class KpiRegistry
         $this->onRegisterCallbacks[] = $callback;
     }
 
-    public function register(KpiDefinition $definition): void
+    public function register(KpiDefinition $kpiDefinition): void
     {
-        $this->definitions[(string) $definition->key()] = $definition;
+        $this->definitions[(string) $kpiDefinition->key()] = $kpiDefinition;
 
-        foreach ($this->onRegisterCallbacks as $callback) {
-            $callback($definition);
+        foreach ($this->onRegisterCallbacks as $onRegisterCallback) {
+            $onRegisterCallback($kpiDefinition);
         }
     }
 
@@ -69,7 +69,7 @@ final class KpiRegistry
         return array_values(
             array_filter(
                 $this->definitions,
-                fn (KpiDefinition $d) => $d->hasRecorderConfig(),
+                fn (KpiDefinition $kpiDefinition): bool => $kpiDefinition->hasRecorderConfig(),
             ),
         );
     }

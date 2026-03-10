@@ -25,7 +25,7 @@ final class TileDefinition
     private function __construct(
         public readonly string $kpiKey,
         private string $label = '',
-        private TileSize $size = TileSize::Medium,
+        private TileSize $tileSize = TileSize::Medium,
         private Granularity $granularity = Granularity::Day,
         private bool $forecast = false,
         private string $forecastHorizon = '30 days',
@@ -49,10 +49,10 @@ final class TileDefinition
         return $clone;
     }
 
-    public function size(TileSize $size): self
+    public function size(TileSize $tileSize): self
     {
         $clone = clone $this;
-        $clone->size = $size;
+        $clone->tileSize = $tileSize;
 
         return $clone;
     }
@@ -119,7 +119,7 @@ final class TileDefinition
 
     public function getSize(): TileSize
     {
-        return $this->size;
+        return $this->tileSize;
     }
 
     public function getGranularity(): Granularity
@@ -160,6 +160,6 @@ final class TileDefinition
 
     public function hasChart(): bool
     {
-        return $this->chartType !== null || $this->size !== TileSize::Small;
+        return $this->chartType !== null || $this->tileSize !== TileSize::Small;
     }
 }

@@ -10,6 +10,7 @@ use Beacon\Recorder\Services\KpiRegistry;
 use DateTimeImmutable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -38,11 +39,11 @@ final class AggregateKpiJob implements ShouldQueue
         public readonly string $kpiKey,
     ) {}
 
-    public function handle(KpiRegistry $registry): void
+    public function handle(KpiRegistry $kpiRegistry): void
     {
-        $definition = $registry->get($this->kpiKey);
+        $definition = $kpiRegistry->get($this->kpiKey);
 
-        if ($definition === null) {
+        if (! $definition instanceof KpiDefinition) {
             return;
         }
 
@@ -71,7 +72,7 @@ final class AggregateKpiJob implements ShouldQueue
      * @param  Collection<int, stdClass>  $events
      */
     private function aggregateForGranularity(
-        \Illuminate\Database\Connection $db,
+        Connection $connection,
         Collection $events,
         Granularity $granularity,
     ): void {
@@ -87,14 +88,14 @@ final class AggregateKpiJob implements ShouldQueue
             $count = $periodEvents->count();
 
             // Upsert — idempotent: update if exists, insert if not
-            $existing = $db->table('kpi_aggregates')
+            $existing = $connection->table('kpi_aggregates')
                 ->where('kpi_key', $this->kpiKey)
                 ->where('granularity', $granularity->value)
                 ->where('period_start', $periodStart)
                 ->first();
 
             if ($existing !== null) {
-                $db->table('kpi_aggregates')
+                $connection->table('kpi_aggregates')
                     ->where('kpi_key', $this->kpiKey)
                     ->where('granularity', $granularity->value)
                     ->where('period_start', $periodStart)
@@ -104,7 +105,7 @@ final class AggregateKpiJob implements ShouldQueue
                         'updated_at' => now()->toDateTimeString(),
                     ]);
             } else {
-                $db->table('kpi_aggregates')->insert([
+                $connection->table('kpi_aggregates')->insert([
                     'kpi_key' => $this->kpiKey,
                     'granularity' => $granularity->value,
                     'period_start' => $periodStart,
@@ -119,12 +120,12 @@ final class AggregateKpiJob implements ShouldQueue
     }
 
     private function enforceRetention(
-        \Illuminate\Database\Connection $db,
-        KpiDefinition $definition,
+        Connection $connection,
+        KpiDefinition $kpiDefinition,
     ): void {
-        $cutoff = now()->subDays($definition->getRetentionDays())->toDateTimeString();
+        $cutoff = now()->subDays($kpiDefinition->getRetentionDays())->toDateTimeString();
 
-        $db->table('kpi_events')
+        $connection->table('kpi_events')
             ->where('kpi_key', $this->kpiKey)
             ->where('recorded_at', '<', $cutoff)
             ->delete();
