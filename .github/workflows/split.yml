@@ -56,15 +56,12 @@ jobs:
       matrix:
         package:
           - local_path: packages/core
-            repository_org: rokde
             repository_name: beacon-core
             deploy_key: CORE_DEPLOY_KEY
           - local_path: packages/recorder
-            repository_org: rokde
             repository_name: beacon-recorder
             deploy_key: RECORDER_DEPLOY_KEY
           - local_path: packages/dashboard
-            repository_org: rokde
             repository_name: beacon-dashboard
             deploy_key: DASHBOARD_DEPLOY_KEY
 
@@ -76,7 +73,7 @@ jobs:
       - uses: danharrin/monorepo-split-github-action@v2.4.4
         with:
           package_directory: ${{ matrix.package.local_path }}
-          repository_organization: ${{ matrix.package.repository_org }}
+          repository_organization: rokde
           repository_name: ${{ matrix.package.repository_name }}
           branch: main
           tag: ${{ github.ref_name }}
