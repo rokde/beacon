@@ -16,8 +16,8 @@ final class EventListenerDefinition
     public readonly mixed $extractor;
 
     /**
-     * @param class-string                  $eventClass Fully qualified event class name
-     * @param callable(object): (float|int) $extractor  Extracts the value from the event
+     * @param  class-string  $eventClass  Fully qualified event class name
+     * @param  callable(object): (float|int)  $extractor  Extracts the value from the event
      */
     public function __construct(
         public readonly string $eventClass,

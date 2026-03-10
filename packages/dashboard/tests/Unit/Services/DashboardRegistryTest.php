@@ -7,7 +7,7 @@ use Beacon\Dashboard\Services\DashboardRegistry;
 
 describe('DashboardRegistry', function () {
     beforeEach(function () {
-        $this->registry = new DashboardRegistry();
+        $this->registry = new DashboardRegistry;
     });
 
     it('starts empty', function () {

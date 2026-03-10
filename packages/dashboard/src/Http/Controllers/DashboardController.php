@@ -15,12 +15,11 @@ final class DashboardController
     public function __construct(
         private readonly DashboardRegistry $registry,
         private readonly QueryEngine $query,
-    ) {
-    }
+    ) {}
 
     public function show(Request $request, string $path = ''): SymfonyResponse
     {
-        $normalizedPath = '/' . ltrim($path, '/');
+        $normalizedPath = '/'.ltrim($path, '/');
         $dashboard = $this->registry->findByPath($normalizedPath);
 
         if ($dashboard === null) {

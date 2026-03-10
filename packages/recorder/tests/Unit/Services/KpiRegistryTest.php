@@ -8,7 +8,7 @@ use Beacon\Recorder\Services\KpiRegistry;
 
 describe('KpiRegistry', function () {
     beforeEach(function () {
-        $this->registry = new KpiRegistry();
+        $this->registry = new KpiRegistry;
     });
 
     it('starts empty', function () {

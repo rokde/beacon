@@ -23,7 +23,7 @@ describe('EventListenerDefinition', function () {
             extractor: fn ($event) => 1,
         );
 
-        $result = ($listener->extractor)(new stdClass());
+        $result = ($listener->extractor)(new stdClass);
         expect($result)->toBe(1);
     });
 });

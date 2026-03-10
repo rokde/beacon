@@ -21,8 +21,7 @@ final class QueryEngine
 {
     public function __construct(
         private readonly ForecastEngine $forecast,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{
@@ -61,7 +60,7 @@ final class QueryEngine
      */
     private function executeQuery(TileDefinition $tile, string $connection, Freshness $freshness): array
     {
-        $now = new DateTimeImmutable();
+        $now = new DateTimeImmutable;
         $from = $now->modify("-{$tile->getPeriodDays()} days");
 
         $series = $this->fetchSeries($tile->kpiKey, $tile->getGranularity(), $from, $now, $connection);
@@ -88,9 +87,9 @@ final class QueryEngine
 
         $trendDirection = match (true) {
             $trendPct === null => 'neutral',
-            $trendPct > 0      => 'up',
-            $trendPct < 0      => 'down',
-            default            => 'neutral',
+            $trendPct > 0 => 'up',
+            $trendPct < 0 => 'down',
+            default => 'neutral',
         };
 
         $forecastPoints = [];
@@ -104,14 +103,14 @@ final class QueryEngine
         }
 
         return [
-            'current_value'    => $currentValue,
-            'previous_value'   => $previousValue,
-            'trend_direction'  => $trendDirection,
-            'trend_pct'        => $trendPct,
+            'current_value' => $currentValue,
+            'previous_value' => $previousValue,
+            'trend_direction' => $trendDirection,
+            'trend_pct' => $trendPct,
             'comparison_label' => $comparisonLabel,
-            'series'           => $series,
-            'forecast'         => $forecastPoints,
-            'is_realtime'      => $freshness->isRealtime(),
+            'series' => $series,
+            'forecast' => $forecastPoints,
+            'is_realtime' => $freshness->isRealtime(),
         ];
     }
 
@@ -140,8 +139,8 @@ final class QueryEngine
         $result = array_values($rows->map(function (object $row): array {
             return [
                 'period_start' => (string) $row->period_start,  // @phpstan-ignore-line
-                'value'        => (float) $row->value,           // @phpstan-ignore-line
-                'count'        => (int) $row->count,             // @phpstan-ignore-line
+                'value' => (float) $row->value,           // @phpstan-ignore-line
+                'count' => (int) $row->count,             // @phpstan-ignore-line
             ];
         })->all());
 

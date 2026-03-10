@@ -18,7 +18,7 @@ final class DashboardServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/config/kpi-dashboard.php',
+            __DIR__.'/config/kpi-dashboard.php',
             'kpi-dashboard',
         );
 
@@ -39,7 +39,7 @@ final class DashboardServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(
-            __DIR__ . '/../resources/views',
+            __DIR__.'/../resources/views',
             'beacon-dashboard',
         );
 
@@ -65,17 +65,17 @@ final class DashboardServiceProvider extends ServiceProvider
 
         // Config
         $this->publishes([
-            __DIR__ . '/config/kpi-dashboard.php' => config_path('kpi-dashboard.php'),
+            __DIR__.'/config/kpi-dashboard.php' => config_path('kpi-dashboard.php'),
         ], 'beacon-dashboard-config');
 
         // Compiled assets (dist/) — committed to git, no build step for consumers
         $this->publishes([
-            __DIR__ . '/../dist' => public_path('vendor/beacon'),
+            __DIR__.'/../dist' => public_path('vendor/beacon'),
         ], 'beacon-dashboard-assets');
 
         // Views — publishable for customisation
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/beacon-dashboard'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/beacon-dashboard'),
         ], 'beacon-dashboard-views');
     }
 

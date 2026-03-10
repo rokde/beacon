@@ -19,12 +19,12 @@ final class KpiInstallCommand extends Command
         $this->info('Installing Beacon KPI Recorder...');
 
         $this->callSilent('vendor:publish', [
-            '--tag'   => 'beacon-recorder-config',
+            '--tag' => 'beacon-recorder-config',
             '--force' => $this->option('force'),
         ]);
 
         $this->callSilent('vendor:publish', [
-            '--tag'   => 'beacon-recorder-migrations',
+            '--tag' => 'beacon-recorder-migrations',
             '--force' => $this->option('force'),
         ]);
 

@@ -36,8 +36,7 @@ final class AggregateKpiJob implements ShouldQueue
 
     public function __construct(
         public readonly string $kpiKey,
-    ) {
-    }
+    ) {}
 
     public function handle(KpiRegistry $registry): void
     {
@@ -69,7 +68,7 @@ final class AggregateKpiJob implements ShouldQueue
     }
 
     /**
-     * @param Collection<int, stdClass> $events
+     * @param  Collection<int, stdClass>  $events
      */
     private function aggregateForGranularity(
         \Illuminate\Database\Connection $db,
@@ -100,20 +99,20 @@ final class AggregateKpiJob implements ShouldQueue
                     ->where('granularity', $granularity->value)
                     ->where('period_start', $periodStart)
                     ->update([
-                        'value'      => $value,
-                        'count'      => $count,
+                        'value' => $value,
+                        'count' => $count,
                         'updated_at' => now()->toDateTimeString(),
                     ]);
             } else {
                 $db->table('kpi_aggregates')->insert([
-                    'kpi_key'      => $this->kpiKey,
-                    'granularity'  => $granularity->value,
+                    'kpi_key' => $this->kpiKey,
+                    'granularity' => $granularity->value,
                     'period_start' => $periodStart,
-                    'value'        => $value,
-                    'count'        => $count,
-                    'meta'         => '{}',
-                    'created_at'   => now()->toDateTimeString(),
-                    'updated_at'   => now()->toDateTimeString(),
+                    'value' => $value,
+                    'count' => $count,
+                    'meta' => '{}',
+                    'created_at' => now()->toDateTimeString(),
+                    'updated_at' => now()->toDateTimeString(),
                 ]);
             }
         }

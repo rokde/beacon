@@ -15,8 +15,7 @@ final class KpiKey implements Stringable
 
     private function __construct(
         private readonly string $value,
-    ) {
-    }
+    ) {}
 
     public static function fromString(string $key): self
     {

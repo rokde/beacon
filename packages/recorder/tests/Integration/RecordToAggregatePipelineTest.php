@@ -95,18 +95,18 @@ describe('Record → Aggregate Pipeline (Integration)', function () {
 
         // Insert a very old event (beyond retention)
         DB::connection('kpi')->table('kpi_events')->insert([
-            'kpi_key'     => 'daily_signups',
-            'value'       => 1,
+            'kpi_key' => 'daily_signups',
+            'value' => 1,
             'recorded_at' => now()->subDays(10)->toDateTimeString(),
-            'meta'        => '{}',
+            'meta' => '{}',
         ]);
 
         // Insert a recent event (within retention)
         DB::connection('kpi')->table('kpi_events')->insert([
-            'kpi_key'     => 'daily_signups',
-            'value'       => 1,
+            'kpi_key' => 'daily_signups',
+            'value' => 1,
             'recorded_at' => now()->subDays(2)->toDateTimeString(),
-            'meta'        => '{}',
+            'meta' => '{}',
         ]);
 
         (new AggregateKpiJob('daily_signups'))->handle(app(KpiRegistry::class));

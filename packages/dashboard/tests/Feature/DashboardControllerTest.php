@@ -21,14 +21,14 @@ describe('DashboardController', function () {
 
         // Seed some aggregate data
         DB::connection('kpi')->table('kpi_aggregates')->insert([
-            'kpi_key'      => 'signups',
-            'granularity'  => 'day',
+            'kpi_key' => 'signups',
+            'granularity' => 'day',
             'period_start' => now()->subDays(5)->format('Y-m-d 00:00:00'),
-            'value'        => 42,
-            'count'        => 42,
-            'meta'         => '{}',
-            'created_at'   => now()->toDateTimeString(),
-            'updated_at'   => now()->toDateTimeString(),
+            'value' => 42,
+            'count' => 42,
+            'meta' => '{}',
+            'created_at' => now()->toDateTimeString(),
+            'updated_at' => now()->toDateTimeString(),
         ]);
     });
 

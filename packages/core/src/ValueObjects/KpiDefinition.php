@@ -39,7 +39,7 @@ final class KpiDefinition
     // Construction
     // -------------------------------------------------------------------------
 
-    public static function make(KpiKey | string $key): self
+    public static function make(KpiKey|string $key): self
     {
         return new self(
             key: $key instanceof KpiKey ? $key : KpiKey::fromString($key),
@@ -59,7 +59,7 @@ final class KpiDefinition
     }
 
     /**
-     * @param list<Granularity> $granularities
+     * @param  list<Granularity>  $granularities
      */
     public function granularities(array $granularities): self
     {
@@ -83,8 +83,8 @@ final class KpiDefinition
      *
      * Can be called multiple times to register multiple listeners.
      *
-     * @param class-string                  $eventClass
-     * @param callable(object): (float|int) $extractor
+     * @param  class-string  $eventClass
+     * @param  callable(object): (float|int)  $extractor
      */
     public function listenOn(string $eventClass, callable $extractor): self
     {
@@ -163,7 +163,7 @@ final class KpiDefinition
     // -------------------------------------------------------------------------
 
     /**
-     * @param array<mixed> $arguments
+     * @param  array<mixed>  $arguments
      */
     public function __call(string $name, array $arguments): self
     {

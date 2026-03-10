@@ -10,16 +10,12 @@ use Beacon\Recorder\Services\KpiRegistry;
 // Fake event classes for testing
 class UserRegisteredEvent
 {
-    public function __construct(public readonly int $userId = 1)
-    {
-    }
+    public function __construct(public readonly int $userId = 1) {}
 }
 
 class OrderCompletedEvent
 {
-    public function __construct(public readonly float $total = 99.99)
-    {
-    }
+    public function __construct(public readonly float $total = 99.99) {}
 }
 
 describe('KpiEventListener via listenOn', function () {
@@ -61,8 +57,8 @@ describe('KpiEventListener via listenOn', function () {
                 ->listenOn(OrderCompletedEvent::class, fn ($e) => 1),
         );
 
-        event(new UserRegisteredEvent());
-        event(new OrderCompletedEvent());
+        event(new UserRegisteredEvent);
+        event(new OrderCompletedEvent);
 
         KPI::assertRecordedTimes('user_interactions', 2);
     });

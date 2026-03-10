@@ -19,9 +19,9 @@ enum TileSize: string
     public function gridSpan(): int
     {
         return match ($this) {
-            self::Small  => 1,
+            self::Small => 1,
             self::Medium => 2,
-            self::Large  => 4,
+            self::Large => 4,
         };
     }
 }

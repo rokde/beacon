@@ -8,11 +8,11 @@ use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__.'/src',
+        __DIR__.'/tests',
     ])
     ->withSkip([
-        __DIR__ . '/tests',
+        __DIR__.'/tests',
     ])
     ->withPhpSets(php84: true)
     ->withSets([

@@ -12,9 +12,9 @@ interface KpiEventRepositoryContract
     /**
      * Persist a raw KPI event to kpi_events.
      *
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
-    public function insert(KpiKey $key, int | float $value, DateTimeImmutable $recordedAt, array $meta = []): void;
+    public function insert(KpiKey $key, int|float $value, DateTimeImmutable $recordedAt, array $meta = []): void;
 
     /**
      * Fetch all unprocessed events for a given KPI since a given timestamp.

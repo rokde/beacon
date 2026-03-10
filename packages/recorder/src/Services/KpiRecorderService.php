@@ -30,8 +30,7 @@ final class KpiRecorderService implements KpiRecorderContract
         private readonly KpiRegistry $registry,
         private readonly KpiWriteBuffer $buffer,
         private readonly Application $app,
-    ) {
-    }
+    ) {}
 
     public function register(KpiDefinition $definition): void
     {
@@ -39,11 +38,11 @@ final class KpiRecorderService implements KpiRecorderContract
     }
 
     /**
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
-    public function record(string $kpiKey, int | float $value, array $meta = []): void
+    public function record(string $kpiKey, int|float $value, array $meta = []): void
     {
-        $recordedAt = new DateTimeImmutable();
+        $recordedAt = new DateTimeImmutable;
 
         if ($this->shouldBuffer()) {
             $this->buffer->push($kpiKey, $value, $recordedAt, $meta);

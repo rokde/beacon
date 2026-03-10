@@ -20,8 +20,7 @@ final class Comparison
         public readonly string $label,
         public readonly string $offset,
         public readonly ?string $window,
-    ) {
-    }
+    ) {}
 
     public static function previousPeriod(): self
     {
@@ -53,7 +52,7 @@ final class Comparison
 
             return [
                 'from' => $currentFrom->modify("-{$windowSeconds} seconds"),
-                'to'   => $currentTo->modify("-{$windowSeconds} seconds"),
+                'to' => $currentTo->modify("-{$windowSeconds} seconds"),
             ];
         }
 

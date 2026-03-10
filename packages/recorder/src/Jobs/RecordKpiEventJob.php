@@ -28,12 +28,11 @@ final class RecordKpiEventJob implements ShouldQueue
 
     public function __construct(
         public readonly string $kpiKey,
-        public readonly int | float $value,
+        public readonly int|float $value,
         public readonly DateTimeInterface $recordedAt,
         /** @var array<string, mixed> */
         public readonly array $meta,
-    ) {
-    }
+    ) {}
 
     public function handle(): void
     {
@@ -41,10 +40,10 @@ final class RecordKpiEventJob implements ShouldQueue
         DB::connection(is_string($rawConnection) ? $rawConnection : 'kpi')
             ->table('kpi_events')
             ->insert([
-                'kpi_key'     => $this->kpiKey,
-                'value'       => $this->value,
+                'kpi_key' => $this->kpiKey,
+                'value' => $this->value,
                 'recorded_at' => $this->recordedAt->format('Y-m-d H:i:s'),
-                'meta'        => json_encode($this->meta, JSON_THROW_ON_ERROR),
+                'meta' => json_encode($this->meta, JSON_THROW_ON_ERROR),
             ]);
     }
 }

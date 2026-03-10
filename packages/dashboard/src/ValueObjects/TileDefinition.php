@@ -32,8 +32,7 @@ final class TileDefinition
         private ?string $chartType = null,
         private int $chartHeight = 200,
         private int $periodDays = 30,
-    ) {
-    }
+    ) {}
 
     public static function kpi(string $kpiKey): self
     {
@@ -75,7 +74,7 @@ final class TileDefinition
     }
 
     /**
-     * @param list<Comparison> $comparisons
+     * @param  list<Comparison>  $comparisons
      */
     public function comparisons(array $comparisons): self
     {

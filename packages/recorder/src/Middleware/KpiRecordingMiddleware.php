@@ -30,8 +30,7 @@ final class KpiRecordingMiddleware
 {
     public function __construct(
         private readonly KpiWriteBuffer $buffer,
-    ) {
-    }
+    ) {}
 
     public function handle(Request $request, Closure $next): SymfonyResponse
     {

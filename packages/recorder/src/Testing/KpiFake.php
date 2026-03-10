@@ -29,15 +29,15 @@ final class KpiFake implements KpiRecorderContract
     }
 
     /**
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
-    public function record(string $kpiKey, int | float $value, array $meta = []): void
+    public function record(string $kpiKey, int|float $value, array $meta = []): void
     {
         $this->recorded[] = [
-            'kpiKey'     => $kpiKey,
-            'value'      => $value,
-            'meta'       => $meta,
-            'recordedAt' => new DateTimeImmutable(),
+            'kpiKey' => $kpiKey,
+            'value' => $value,
+            'meta' => $meta,
+            'recordedAt' => new DateTimeImmutable,
         ];
     }
 
@@ -55,7 +55,7 @@ final class KpiFake implements KpiRecorderContract
     // Assertion helpers
     // -------------------------------------------------------------------------
 
-    public function assertRecorded(string $kpiKey, int | float $value): void
+    public function assertRecorded(string $kpiKey, int|float $value): void
     {
         $matches = array_filter(
             $this->recorded,
@@ -77,7 +77,7 @@ final class KpiFake implements KpiRecorderContract
 
         Assert::assertEmpty(
             $matches,
-            "Expected KPI [{$kpiKey}] to not be recorded, but it was recorded " . count($matches) . ' time(s).',
+            "Expected KPI [{$kpiKey}] to not be recorded, but it was recorded ".count($matches).' time(s).',
         );
     }
 
@@ -91,7 +91,7 @@ final class KpiFake implements KpiRecorderContract
         Assert::assertCount(
             $times,
             $matches,
-            "Expected KPI [{$kpiKey}] to be recorded {$times} time(s), but was recorded " . count($matches) . ' time(s).',
+            "Expected KPI [{$kpiKey}] to be recorded {$times} time(s), but was recorded ".count($matches).' time(s).',
         );
     }
 

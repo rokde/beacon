@@ -25,10 +25,10 @@ describe('AggregateKpiJob', function () {
 
         foreach (range(1, 3) as $i) {
             DB::connection('kpi')->table('kpi_events')->insert([
-                'kpi_key'     => 'signups',
-                'value'       => 1,
+                'kpi_key' => 'signups',
+                'value' => 1,
                 'recorded_at' => "{$day} 10:0{$i}:00",
-                'meta'        => '{}',
+                'meta' => '{}',
             ]);
         }
 

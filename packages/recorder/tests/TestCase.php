@@ -35,9 +35,9 @@ abstract class TestCase extends OrchestraTestCase
     {
         $app['config']->set('database.default', 'kpi');
         $app['config']->set('database.connections.kpi', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         $app['config']->set('kpi-recorder.connection', 'kpi');
@@ -50,7 +50,7 @@ abstract class TestCase extends OrchestraTestCase
     protected function defineDatabaseMigrations(): void
     {
         $this->loadMigrationsFrom(
-            __DIR__ . '/../src/database/migrations',
+            __DIR__.'/../src/database/migrations',
         );
     }
 }

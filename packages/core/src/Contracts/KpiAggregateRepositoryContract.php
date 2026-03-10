@@ -14,7 +14,7 @@ interface KpiAggregateRepositoryContract
      * Upsert an aggregate value for a given KPI, granularity and period.
      * Idempotent — safe to call multiple times for the same period.
      *
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
     public function upsert(
         KpiKey $key,

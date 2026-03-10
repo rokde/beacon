@@ -28,7 +28,7 @@ final class KpiRegistry
      * Used by RecorderServiceProvider to hook in event-listener registration so
      * definitions added after boot() (e.g. in tests) still get listeners.
      *
-     * @param callable(KpiDefinition): void $callback
+     * @param  callable(KpiDefinition): void  $callback
      */
     public function onRegister(callable $callback): void
     {

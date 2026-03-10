@@ -16,9 +16,8 @@ use DateTimeImmutable;
 final class ForecastEngine
 {
     /**
-     * @param list<array{period_start: string, value: float, count: int}> $series
-     * @param string                                                      $horizon e.g. '30 days', '7 days', '12 weeks'
-     *
+     * @param  list<array{period_start: string, value: float, count: int}>  $series
+     * @param  string  $horizon  e.g. '30 days', '7 days', '12 weeks'
      * @return list<array{date: string, value: float, lower: float|null, upper: float|null}>
      */
     public function compute(array $series, string $horizon, Granularity $granularity): array
@@ -61,7 +60,7 @@ final class ForecastEngine
             $upper = $residualStd > 0 ? $value + $z * $residualStd * sqrt($i) : null;
 
             $points[] = [
-                'date'  => $date->format('Y-m-d H:i:s'),
+                'date' => $date->format('Y-m-d H:i:s'),
                 'value' => round($value, 4),
                 'lower' => $lower !== null ? round($lower, 4) : null,
                 'upper' => $upper !== null ? round($upper, 4) : null,
@@ -72,9 +71,8 @@ final class ForecastEngine
     }
 
     /**
-     * @param list<int>   $xs
-     * @param list<float> $ys
-     *
+     * @param  list<int>  $xs
+     * @param  list<float>  $ys
      * @return array{float, float} [slope, intercept]
      */
     private function linearRegression(array $xs, array $ys): array
@@ -131,9 +129,9 @@ final class ForecastEngine
                 'day', 'days' => $count * 24,
                 default => $count,
             },
-            Granularity::Week  => (int) ceil($count / 7),
+            Granularity::Week => (int) ceil($count / 7),
             Granularity::Month => (int) ceil($count / 30),
-            default            => $count,
+            default => $count,
         };
     }
 
@@ -141,11 +139,11 @@ final class ForecastEngine
     {
         return match ($granularity) {
             Granularity::Minute => 'minutes',
-            Granularity::Hour   => 'hours',
-            Granularity::Day    => 'days',
-            Granularity::Week   => 'weeks',
-            Granularity::Month  => 'months',
-            Granularity::Year   => 'years',
+            Granularity::Hour => 'hours',
+            Granularity::Day => 'days',
+            Granularity::Week => 'weeks',
+            Granularity::Month => 'months',
+            Granularity::Year => 'years',
         };
     }
 }

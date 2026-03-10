@@ -20,7 +20,7 @@ final class KpiEventListener
     private $extractor;
 
     /**
-     * @param callable(object): (float|int) $extractor
+     * @param  callable(object): (float|int)  $extractor
      */
     public function __construct(
         private readonly KpiRecorderContract $recorder,

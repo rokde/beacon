@@ -73,7 +73,7 @@ final class DashboardDefinition
     }
 
     /**
-     * @param list<TileDefinition> $tiles
+     * @param  list<TileDefinition>  $tiles
      */
     public function tiles(array $tiles): self
     {
@@ -126,6 +126,6 @@ final class DashboardDefinition
      */
     public function fullPath(string $basePath): string
     {
-        return rtrim($basePath, '/') . '/' . ltrim($this->path, '/');
+        return rtrim($basePath, '/').'/'.ltrim($this->path, '/');
     }
 }

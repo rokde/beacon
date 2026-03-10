@@ -22,7 +22,7 @@ final class RecorderServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/config/kpi-recorder.php',
+            __DIR__.'/config/kpi-recorder.php',
             'kpi-recorder',
         );
 
@@ -63,11 +63,11 @@ final class RecorderServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/config/kpi-recorder.php' => config_path('kpi-recorder.php'),
+            __DIR__.'/config/kpi-recorder.php' => config_path('kpi-recorder.php'),
         ], 'beacon-recorder-config');
 
         $this->publishes([
-            __DIR__ . '/database/migrations' => database_path('migrations'),
+            __DIR__.'/database/migrations' => database_path('migrations'),
         ], 'beacon-recorder-migrations');
     }
 
@@ -89,7 +89,7 @@ final class RecorderServiceProvider extends ServiceProvider
             }
 
             foreach ($definition->getEventListeners() as $listenerDef) {
-                $registrationKey = $listenerDef->eventClass . '|' . (string) $definition->key();
+                $registrationKey = $listenerDef->eventClass.'|'.(string) $definition->key();
 
                 if (isset($registered[$registrationKey])) {
                     continue;

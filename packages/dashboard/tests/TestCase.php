@@ -20,22 +20,22 @@ abstract class TestCase extends OrchestraTestCase
     {
         $app['config']->set('database.default', 'kpi');
         $app['config']->set('database.connections.kpi', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
         $app['config']->set('kpi-dashboard.connection', 'kpi');
         $app['config']->set('kpi-dashboard.base_path', '/kpi');
         $app['config']->set('kpi-dashboard.refresh_interval', 300);
 
         // Required by the web middleware group (session encryption)
-        $app['config']->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+        $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
     }
 
     protected function defineDatabaseMigrations(): void
     {
         $this->loadMigrationsFrom(
-            __DIR__ . '/../../recorder/src/database/migrations',
+            __DIR__.'/../../recorder/src/database/migrations',
         );
     }
 }

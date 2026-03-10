@@ -20,9 +20,9 @@ final class KpiWriteBuffer
     private array $pending = [];
 
     /**
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
-    public function push(string $kpiKey, int | float $value, DateTimeInterface $recordedAt, array $meta): void
+    public function push(string $kpiKey, int|float $value, DateTimeInterface $recordedAt, array $meta): void
     {
         $this->pending[] = compact('kpiKey', 'value', 'recordedAt', 'meta');
     }

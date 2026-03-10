@@ -21,9 +21,9 @@ interface KpiRecorderContract
      * - Enqueues the write to a TerminableMiddleware buffer (HTTP context, sync queue)
      * - Dispatches a RecordKpiEventJob to the queue (non-HTTP or async queue)
      *
-     * @param array<string, mixed> $meta
+     * @param  array<string, mixed>  $meta
      */
-    public function record(string $kpiKey, int | float $value, array $meta = []): void;
+    public function record(string $kpiKey, int|float $value, array $meta = []): void;
 
     /**
      * Return all registered definitions.

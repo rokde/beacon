@@ -10,10 +10,10 @@ use Beacon\Recorder\Testing\KpiFake;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static void                register(KpiDefinition $definition)
- * @method static void                record(string $kpiKey, int|float $value, array<string, mixed> $meta = [])
+ * @method static void register(KpiDefinition $definition)
+ * @method static void record(string $kpiKey, int|float $value, array<string, mixed> $meta = [])
  * @method static list<KpiDefinition> definitions()
- * @method static KpiDefinition|null  definition(string $kpiKey)
+ * @method static KpiDefinition|null definition(string $kpiKey)
  *
  * @see \Beacon\Recorder\Services\KpiRecorderService
  */
@@ -30,7 +30,7 @@ final class KPI extends Facade
      */
     public static function fake(): KpiFake
     {
-        $fake = new KpiFake();
+        $fake = new KpiFake;
         self::swap($fake);
 
         return $fake;

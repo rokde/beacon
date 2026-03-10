@@ -16,9 +16,9 @@ if (! function_exists('beacon_asset')) {
         $base = config('kpi-dashboard.asset_url');
 
         if (is_string($base) && $base !== '') {
-            return rtrim($base, '/') . '/' . ltrim($path, '/');
+            return rtrim($base, '/').'/'.ltrim($path, '/');
         }
 
-        return asset('vendor/beacon/' . ltrim($path, '/'));
+        return asset('vendor/beacon/'.ltrim($path, '/'));
     }
 }

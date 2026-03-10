@@ -27,7 +27,7 @@ enum Freshness: string
     public function maxDelayMinutes(): int
     {
         return match ($this) {
-            self::Realtime  => 0,
+            self::Realtime => 0,
             self::Aggregate => 5,
         };
     }

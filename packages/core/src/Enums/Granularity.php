@@ -88,11 +88,11 @@ enum Granularity: string
     {
         return match ($this) {
             self::Minute => 'Per Minute',
-            self::Hour   => 'Hourly',
-            self::Day    => 'Daily',
-            self::Week   => 'Weekly',
-            self::Month  => 'Monthly',
-            self::Year   => 'Yearly',
+            self::Hour => 'Hourly',
+            self::Day => 'Daily',
+            self::Week => 'Weekly',
+            self::Month => 'Monthly',
+            self::Year => 'Yearly',
         };
     }
 }
