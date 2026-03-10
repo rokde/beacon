@@ -4,6 +4,7 @@ includes:
 
 parameters:
     level: 10
+    treatPhpDocTypesAsCertain: false
     paths:
         - packages/core/src
         - packages/recorder/src
