@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.3 - 2026-03-10
+
+* improve the split workflow
+
+**Full Changelog**: https://github.com/rokde/beacon/compare/v0.0.2...v0.0.3
+
 ## v0.0.2 - 2026-03-10
 
 * modified split workflow to split the monorepo
