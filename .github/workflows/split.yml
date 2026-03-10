@@ -82,5 +82,4 @@ jobs:
           tag: ${{ github.ref_name }}
           user_name: "rokde"
           user_email: "post@robert-kummer.de"
-        env:
-          GITHUB_TOKEN: ${{ secrets[matrix.package.deploy_key] }}
+          ssh_private_key: ${{ secrets[matrix.package.deploy_key] }}
