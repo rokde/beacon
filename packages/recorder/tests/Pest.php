@@ -2,5 +2,7 @@
 
 declare(strict_types=1);
 
-uses(Beacon\Recorder\Tests\TestCase::class)
+use Beacon\Recorder\Tests\TestCase;
+
+uses(TestCase::class)
     ->in('Unit', 'Integration');

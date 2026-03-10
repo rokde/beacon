@@ -113,7 +113,7 @@ final class DashboardDefinition
 
     public function isAuthorized(mixed $user): bool
     {
-        if (! $this->authCallback instanceof \Closure) {
+        if (! $this->authCallback instanceof Closure) {
             return true;
         }
 

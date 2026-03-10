@@ -2,5 +2,7 @@
 
 declare(strict_types=1);
 
-uses(Beacon\Dashboard\Tests\TestCase::class)
+use Beacon\Dashboard\Tests\TestCase;
+
+uses(TestCase::class)
     ->in('Unit', 'Feature');

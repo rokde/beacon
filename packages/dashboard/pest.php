@@ -2,4 +2,6 @@
 
 declare(strict_types=1);
 
-uses(Beacon\Dashboard\Tests\TestCase::class)->in('tests');
+use Beacon\Dashboard\Tests\TestCase;
+
+uses(TestCase::class)->in('tests');

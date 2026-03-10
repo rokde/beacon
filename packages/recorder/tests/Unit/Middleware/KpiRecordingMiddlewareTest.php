@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use Beacon\Recorder\Jobs\RecordKpiEventJob;
 use Beacon\Recorder\Middleware\KpiRecordingMiddleware;
+use Beacon\Recorder\Services\KpiWriteBuffer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Queue;
 
 describe('KpiRecordingMiddleware', function () {
     it('passes the request through without modification', function () {
@@ -19,7 +22,7 @@ describe('KpiRecordingMiddleware', function () {
 
     it('flushes pending kpi writes in terminate()', function () {
         $middleware = app(KpiRecordingMiddleware::class);
-        $buffer = app(Beacon\Recorder\Services\KpiWriteBuffer::class);
+        $buffer = app(KpiWriteBuffer::class);
 
         $buffer->push('signups', 1, now(), []);
         $buffer->push('signups', 1, now(), []);
@@ -35,10 +38,10 @@ describe('KpiRecordingMiddleware', function () {
     });
 
     it('dispatches a RecordKpiEventJob for each buffered write on terminate', function () {
-        Illuminate\Support\Facades\Queue::fake();
+        Queue::fake();
 
         $middleware = app(KpiRecordingMiddleware::class);
-        $buffer = app(Beacon\Recorder\Services\KpiWriteBuffer::class);
+        $buffer = app(KpiWriteBuffer::class);
 
         $buffer->push('new_registrations', 1, now(), []);
         $buffer->push('order_value', 99.0, now(), ['plan' => 'pro']);
@@ -48,9 +51,6 @@ describe('KpiRecordingMiddleware', function () {
             new Response('OK', 200),
         );
 
-        Illuminate\Support\Facades\Queue::assertPushed(
-            Beacon\Recorder\Jobs\RecordKpiEventJob::class,
-            2,
-        );
+        Queue::assertPushed(RecordKpiEventJob::class, 2);
     });
 });

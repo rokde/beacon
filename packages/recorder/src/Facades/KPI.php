@@ -6,6 +6,7 @@ namespace Beacon\Recorder\Facades;
 
 use Beacon\Core\Contracts\KpiRecorderContract;
 use Beacon\Core\ValueObjects\KpiDefinition;
+use Beacon\Recorder\Services\KpiRecorderService;
 use Beacon\Recorder\Testing\KpiFake;
 use Illuminate\Support\Facades\Facade;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static list<KpiDefinition> definitions()
  * @method static KpiDefinition|null definition(string $kpiKey)
  *
- * @see \Beacon\Recorder\Services\KpiRecorderService
+ * @see KpiRecorderService
  */
 final class KPI extends Facade
 {
