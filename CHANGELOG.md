@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.4 - 2026-03-10
+
+* chore: update split.yml to use repository org/name and upgrade action to v2.4.4
+
+**Full Changelog**: https://github.com/rokde/beacon/compare/v0.0.3...v0.0.4
+
 ## v0.0.3 - 2026-03-10
 
 * improve the split workflow
