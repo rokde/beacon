@@ -5,7 +5,7 @@
  * from the server and replacing the tile's inner content.
  * Chart.js instances are properly destroyed before re-init to avoid leaks.
  */
-import { destroyChart } from './chart'
+import { destroyChart, initChart } from './chart'
 
 interface PollingOptions {
     /** URL to fetch the refreshed dashboard HTML from */
@@ -88,10 +88,7 @@ function initChartsInContainer(container: HTMLElement): void {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const options = JSON.parse(raw) as any
-            // Dynamically import to avoid circular deps — chart module is loaded once
-            void import('./chart').then(({ initChart }) => {
-                initChart(canvas, options)
-            })
+            initChart(canvas, options)
         } catch {
             console.warn('[Beacon] Failed to parse chart options on canvas', canvas)
         }
