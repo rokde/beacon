@@ -57,13 +57,13 @@ jobs:
         package:
           - local_path: packages/core
             repository_name: beacon-core
-            deploy_key: CORE_DEPLOY_KEY
+            token_secret: CORE_DEPLOY_KEY
           - local_path: packages/recorder
             repository_name: beacon-recorder
-            deploy_key: RECORDER_DEPLOY_KEY
+            token_secret: RECORDER_DEPLOY_KEY
           - local_path: packages/dashboard
             repository_name: beacon-dashboard
-            deploy_key: DASHBOARD_DEPLOY_KEY
+            token_secret: DASHBOARD_DEPLOY_KEY
 
     steps:
       - uses: actions/checkout@v6
@@ -79,4 +79,5 @@ jobs:
           tag: ${{ github.ref_name }}
           user_name: "rokde"
           user_email: "post@robert-kummer.de"
-          ssh_private_key: ${{ secrets[matrix.package.deploy_key] }}
+        env:
+          GITHUB_TOKEN: ${{ secrets[matrix.package.token_secret] }}
