@@ -20,7 +20,8 @@ final class KpiReaggregateCommand extends Command
 
     public function handle(KpiRegistry $kpiRegistry): int
     {
-        $kpiKey = $this->argument('kpi');
+        $rawKpiKey = $this->argument('kpi');
+        $kpiKey = is_string($rawKpiKey) ? $rawKpiKey : '';
         $definition = $kpiRegistry->get($kpiKey);
 
         if (! $definition instanceof KpiDefinition) {
@@ -29,7 +30,7 @@ final class KpiReaggregateCommand extends Command
             return self::FAILURE;
         }
 
-        if ($this->option('sync')) {
+        if ((bool) $this->option('sync')) {
             $this->info(sprintf('Re-aggregating [%s] synchronously...', $kpiKey));
             new AggregateKpiJob($kpiKey)->handle($kpiRegistry);
             $this->info('✓ Done.');
