@@ -1,0 +1,76 @@
+{
+  "name": "beacon/dashboard",
+  "description": "Beacon Dashboard — Query Engine, Routing, Blade-Views, Tiles, Forecast, Alerting",
+  "type": "library",
+  "require": {
+    "php": "^8.4",
+    "beacon/core": "*",
+    "laravel/framework": "^11.0|^12.0"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "^1.0",
+    "orchestra/testbench": "^9.0|^10.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-laravel": "^3.0",
+    "pestphp/pest-plugin-type-coverage": "^3.0",
+    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^11.0",
+    "rector/rector": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Beacon\\Dashboard\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Beacon\\Dashboard\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    { "type": "path", "url": "../core" }
+  ],
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "test":           "pest --coverage --min=80",
+    "test:types":     "pest --type-coverage --min=100",
+    "analyse":        "phpstan analyse --memory-limit=256M",
+    "format":         "pint",
+    "format:check":   "pint --test",
+    "refactor":       "rector process",
+    "refactor:check": "rector process --dry-run",
+    "ci": [
+      "@format:check",
+      "@refactor:check",
+      "@analyse",
+      "@test",
+      "@test:types"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Beacon\\Dashboard\\DashboardServiceProvider"
+      ]
+    },
+    "boost": {
+      "guidelines": [
+        "resources/boost/guidelines/core.blade.php"
+      ],
+      "skills": [
+        "resources/boost/skills/beacon-dashboard-configuration"
+      ]
+    }
+  }
+}

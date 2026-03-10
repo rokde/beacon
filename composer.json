@@ -1,0 +1,60 @@
+{
+  "name": "beacon/monorepo",
+  "description": "Beacon Monorepo — nur für lokale Entwicklung, nicht auf Packagist",
+  "type": "project",
+  "require": {
+    "beacon/core": "*",
+    "beacon/recorder": "*",
+    "beacon/dashboard": "*"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "^1.0",
+    "orchestra/testbench": "^9.0|^10.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-laravel": "^3.0",
+    "pestphp/pest-plugin-type-coverage": "^3.0",
+    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^11.0",
+    "rector/rector": "^2.0"
+  },
+  "repositories": [
+    { "type": "path", "url": "./packages/core" },
+    { "type": "path", "url": "./packages/recorder" },
+    { "type": "path", "url": "./packages/dashboard" }
+  ],
+  "autoload-dev": {
+    "psr-4": {
+      "Beacon\\Core\\Tests\\": "packages/core/tests/",
+      "Beacon\\Recorder\\Tests\\": "packages/recorder/tests/",
+      "Beacon\\Dashboard\\Tests\\": "packages/dashboard/tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test":           "pest --coverage --min=80",
+    "test:types":     "pest --type-coverage --min=100",
+    "test:core":      "pest --testsuite=Core --coverage --min=80",
+    "test:recorder":  "pest --testsuite=Recorder --coverage --min=80",
+    "test:dashboard": "pest --testsuite=Dashboard --coverage --min=80",
+    "analyse":        "phpstan analyse --memory-limit=512M",
+    "format":         "pint",
+    "format:check":   "pint --test",
+    "refactor":       "rector process",
+    "refactor:check": "rector process --dry-run",
+    "ci": [
+      "@format:check",
+      "@refactor:check",
+      "@analyse",
+      "@test",
+      "@test:types"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

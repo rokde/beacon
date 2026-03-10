@@ -1,0 +1,454 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Beacon Dashboard — Design Tokens via CSS Custom Properties
+   Light mode is default, dark mode via [data-theme="dark"]
+   or prefers-color-scheme media query.
+   ============================================================ */
+
+@layer base {
+    :root {
+        /* Surface */
+        --beacon-bg: #f8fafc;
+        --beacon-surface: #ffffff;
+        --beacon-surface-raised: #f1f5f9;
+        --beacon-border: #e2e8f0;
+        --beacon-border-subtle: #f1f5f9;
+
+        /* Text */
+        --beacon-text-primary: #0f172a;
+        --beacon-text-secondary: #475569;
+        --beacon-text-muted: #94a3b8;
+
+        /* Brand / Accent */
+        --beacon-accent: #6366f1;
+        --beacon-accent-hover: #4f46e5;
+        --beacon-accent-subtle: #eef2ff;
+
+        /* Semantic */
+        --beacon-success: #22c55e;
+        --beacon-success-subtle: #f0fdf4;
+        --beacon-warning: #f59e0b;
+        --beacon-warning-subtle: #fffbeb;
+        --beacon-danger: #ef4444;
+        --beacon-danger-subtle: #fef2f2;
+        --beacon-neutral: #64748b;
+
+        /* Trend indicators */
+        --beacon-trend-up: var(--beacon-success);
+        --beacon-trend-down: var(--beacon-danger);
+        --beacon-trend-neutral: var(--beacon-neutral);
+
+        /* Chart palette (used by TS chart module) */
+        --beacon-chart-1: #6366f1;
+        --beacon-chart-2: #22c55e;
+        --beacon-chart-3: #f59e0b;
+        --beacon-chart-4: #ec4899;
+        --beacon-chart-forecast: #94a3b8;
+        --beacon-chart-forecast-fill: rgba(148, 163, 184, 0.15);
+
+        /* Spacing / Radius */
+        --beacon-radius-sm: 0.375rem;
+        --beacon-radius: 0.5rem;
+        --beacon-radius-lg: 0.75rem;
+        --beacon-radius-xl: 1rem;
+
+        /* Tile */
+        --beacon-tile-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+        --beacon-tile-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+
+        /* Transitions */
+        --beacon-transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"],
+    .dark {
+        --beacon-bg: #0f172a;
+        --beacon-surface: #1e293b;
+        --beacon-surface-raised: #334155;
+        --beacon-border: #334155;
+        --beacon-border-subtle: #1e293b;
+
+        --beacon-text-primary: #f8fafc;
+        --beacon-text-secondary: #94a3b8;
+        --beacon-text-muted: #475569;
+
+        --beacon-accent: #818cf8;
+        --beacon-accent-hover: #6366f1;
+        --beacon-accent-subtle: #1e1b4b;
+
+        --beacon-success-subtle: #052e16;
+        --beacon-warning-subtle: #451a03;
+        --beacon-danger-subtle: #450a0a;
+
+        --beacon-chart-forecast-fill: rgba(148, 163, 184, 0.08);
+
+        --beacon-tile-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+        --beacon-tile-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --beacon-bg: #0f172a;
+            --beacon-surface: #1e293b;
+            --beacon-surface-raised: #334155;
+            --beacon-border: #334155;
+            --beacon-border-subtle: #1e293b;
+
+            --beacon-text-primary: #f8fafc;
+            --beacon-text-secondary: #94a3b8;
+            --beacon-text-muted: #475569;
+
+            --beacon-accent: #818cf8;
+            --beacon-accent-hover: #6366f1;
+            --beacon-accent-subtle: #1e1b4b;
+
+            --beacon-success-subtle: #052e16;
+            --beacon-warning-subtle: #451a03;
+            --beacon-danger-subtle: #450a0a;
+
+            --beacon-chart-forecast-fill: rgba(148, 163, 184, 0.08);
+
+            --beacon-tile-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+            --beacon-tile-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+        }
+    }
+}
+
+/* ============================================================
+   Dashboard Layout
+   ============================================================ */
+
+@layer components {
+    .beacon-layout {
+        min-height: 100vh;
+        background-color: var(--beacon-bg);
+        color: var(--beacon-text-primary);
+        font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .beacon-header {
+        background-color: var(--beacon-surface);
+        border-bottom: 1px solid var(--beacon-border);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .beacon-header__title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--beacon-text-primary);
+        letter-spacing: -0.025em;
+    }
+
+    .beacon-header__meta {
+        font-size: 0.75rem;
+        color: var(--beacon-text-muted);
+    }
+
+    .beacon-main {
+        padding: 1.5rem;
+        max-width: 1400px;
+        margin-inline: auto;
+    }
+
+    /* ---- Grid ---- */
+    .beacon-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+        .beacon-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .beacon-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ---- Tile base ---- */
+    .beacon-tile {
+        background-color: var(--beacon-surface);
+        border: 1px solid var(--beacon-border);
+        border-radius: var(--beacon-radius-lg);
+        box-shadow: var(--beacon-tile-shadow);
+        padding: 1.25rem;
+        overflow: hidden;
+        transition: box-shadow var(--beacon-transition);
+        position: relative;
+    }
+
+    .beacon-tile:hover {
+        box-shadow: var(--beacon-tile-shadow-hover);
+    }
+
+    /* Tile sizes */
+    .beacon-tile--sm {
+        grid-column: span 1;
+    }
+    .beacon-tile--md {
+        grid-column: span 2;
+    }
+    .beacon-tile--lg {
+        grid-column: span 4;
+    }
+
+    @media (max-width: 1024px) {
+        .beacon-tile--lg {
+            grid-column: span 2;
+        }
+    }
+    @media (max-width: 640px) {
+        .beacon-tile--md,
+        .beacon-tile--lg {
+            grid-column: span 1;
+        }
+    }
+
+    /* ---- Tile header ---- */
+    .beacon-tile__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .beacon-tile__label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--beacon-text-muted);
+    }
+
+    .beacon-tile__badge {
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.125rem 0.375rem;
+        border-radius: var(--beacon-radius-sm);
+    }
+
+    .beacon-tile__badge--live {
+        background-color: var(--beacon-danger-subtle);
+        color: var(--beacon-danger);
+        /* Pulse dot via CSS only */
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .beacon-tile__badge--live::before {
+        content: "";
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: 50%;
+        background-color: var(--beacon-danger);
+        animation: beacon-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes beacon-pulse {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: scale(0.8);
+        }
+    }
+
+    /* ---- Metric tile ---- */
+    .beacon-metric__value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        color: var(--beacon-text-primary);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .beacon-metric__value--sm {
+        font-size: 1.5rem;
+    }
+
+    .beacon-metric__comparison {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        color: var(--beacon-text-secondary);
+    }
+
+    .beacon-trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.125rem 0.375rem;
+        border-radius: var(--beacon-radius-sm);
+    }
+
+    .beacon-trend--up {
+        color: var(--beacon-success);
+        background-color: var(--beacon-success-subtle);
+    }
+
+    .beacon-trend--down {
+        color: var(--beacon-danger);
+        background-color: var(--beacon-danger-subtle);
+    }
+
+    .beacon-trend--neutral {
+        color: var(--beacon-neutral);
+        background-color: var(--beacon-surface-raised);
+    }
+
+    /* Arrow indicators — pure CSS, no icon font */
+    .beacon-trend--up::before {
+        content: "↑";
+    }
+    .beacon-trend--down::before {
+        content: "↓";
+    }
+    .beacon-trend--neutral::before {
+        content: "→";
+    }
+
+    /* ---- Chart tile ---- */
+    .beacon-chart-wrapper {
+        position: relative;
+        width: 100%;
+        /* height is set via inline style from Blade (configurable) */
+    }
+
+    /* ---- Gauge tile ---- */
+    .beacon-gauge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .beacon-gauge__arc {
+        /* SVG-based arc — rendered inline, no JS needed for static value */
+    }
+
+    .beacon-gauge__value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--beacon-text-primary);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- Sparkline (inline SVG, no JS) ---- */
+    .beacon-sparkline {
+        width: 100%;
+        height: 2rem;
+        overflow: visible;
+    }
+
+    .beacon-sparkline__line {
+        fill: none;
+        stroke: var(--beacon-accent);
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .beacon-sparkline__area {
+        fill: var(--beacon-accent);
+        opacity: 0.08;
+    }
+
+    /* ---- Empty / loading states ---- */
+    .beacon-skeleton {
+        border-radius: var(--beacon-radius-sm);
+        background: linear-gradient(
+            90deg,
+            var(--beacon-surface-raised) 25%,
+            var(--beacon-border-subtle) 50%,
+            var(--beacon-surface-raised) 75%
+        );
+        background-size: 200% 100%;
+        animation: beacon-shimmer 1.5s ease-in-out infinite;
+    }
+
+    @keyframes beacon-shimmer {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    .beacon-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem;
+        color: var(--beacon-text-muted);
+        font-size: 0.875rem;
+    }
+
+    /* ---- Theme toggle button ---- */
+    .beacon-theme-toggle {
+        width: 2rem;
+        height: 2rem;
+        border-radius: var(--beacon-radius);
+        border: 1px solid var(--beacon-border);
+        background: var(--beacon-surface-raised);
+        color: var(--beacon-text-secondary);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            background var(--beacon-transition),
+            color var(--beacon-transition);
+        font-size: 0.875rem;
+    }
+
+    .beacon-theme-toggle:hover {
+        background: var(--beacon-border);
+        color: var(--beacon-text-primary);
+    }
+
+    /* ---- Refresh indicator ---- */
+    .beacon-refresh-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.6875rem;
+        color: var(--beacon-text-muted);
+    }
+
+    .beacon-refresh-indicator--spinning::before {
+        content: "↻";
+        display: inline-block;
+        animation: beacon-spin 1s linear infinite;
+    }
+
+    @keyframes beacon-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

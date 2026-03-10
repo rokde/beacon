@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+        bootstrap="vendor/autoload.php"
+        colors="true"
+>
+    <testsuites>
+        <testsuite name="Core">
+            <directory>packages/core/tests</directory>
+        </testsuite>
+        <testsuite name="Recorder Unit">
+            <directory>packages/recorder/tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Recorder Integration">
+            <directory>packages/recorder/tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Dashboard Unit">
+            <directory>packages/dashboard/tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Dashboard Feature">
+            <directory>packages/dashboard/tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>packages/core/src</directory>
+            <directory>packages/recorder/src</directory>
+            <directory>packages/dashboard/src</directory>
+        </include>
+        <exclude>
+            <directory>packages/recorder/src/database</directory>
+            <directory>packages/recorder/src/config</directory>
+            <directory>packages/dashboard/src/config</directory>
+        </exclude>
+    </source>
+    <coverage>
+        <report>
+            <clover outputFile="build/coverage/clover.xml"/>
+            <html outputDirectory="build/coverage/html"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+</phpunit>

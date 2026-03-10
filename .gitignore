@@ -1,0 +1,33 @@
+# PHP dependencies
+/vendor/
+/packages/*/vendor/
+
+# Test / build artefacts — NOT committed
+/build/
+/packages/*/build/
+.phpunit.cache/
+.phpunit.result.cache
+*.cache
+
+# JS dependencies — NOT committed
+/packages/dashboard/node_modules/
+
+# dist/ IS committed (needed by host-apps without a Node build step)
+# To exclude from git, uncomment the next line:
+# /packages/dashboard/dist/
+
+# Local dev
+/testbench/vendor/
+/testbench/node_modules/
+/testbench/.env
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

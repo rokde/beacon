@@ -1,0 +1,36 @@
+{
+  "name": "@beacon/dashboard-assets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Beacon Dashboard — frontend asset pipeline",
+  "scripts": {
+    "dev":            "vite",
+    "build":          "vite build",
+    "build:watch":    "vite build --watch",
+    "typecheck":      "tsc --noEmit",
+    "lint":           "oxlint --config oxlint.json resources/ts",
+    "lint:fix":       "oxlint --config oxlint.json --fix resources/ts",
+    "format":         "prettier --write resources/ts resources/css",
+    "format:check":   "prettier --check resources/ts resources/css",
+    "ci": [
+      "npm run format:check",
+      "npm run lint",
+      "npm run typecheck",
+      "npm run build"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "autoprefixer": "^10.4.0",
+    "oxlint": "^0.15.0",
+    "prettier": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0"
+  }
+}

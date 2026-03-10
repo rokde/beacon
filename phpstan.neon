@@ -1,0 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    level: 10
+    paths:
+        - packages/core/src
+        - packages/recorder/src
+        - packages/dashboard/src
+    excludePaths:
+        - packages/recorder/src/database
+        - packages/recorder/src/config
+        - packages/dashboard/src/config

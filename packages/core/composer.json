@@ -1,0 +1,49 @@
+{
+  "name": "beacon/core",
+  "description": "Beacon Core — Contracts, Interfaces, Value Objects, KpiDefinition",
+  "type": "library",
+  "require": {
+    "php": "^8.4"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "^1.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-type-coverage": "^3.0",
+    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^11.0",
+    "rector/rector": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Beacon\\Core\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Beacon\\Core\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test":           "pest --coverage --min=80",
+    "test:types":     "pest --type-coverage --min=100",
+    "analyse":        "phpstan analyse --memory-limit=256M",
+    "format":         "pint",
+    "format:check":   "pint --test",
+    "refactor":       "rector process",
+    "refactor:check": "rector process --dry-run",
+    "ci": [
+      "@format:check",
+      "@refactor:check",
+      "@analyse",
+      "@test",
+      "@test:types"
+    ]
+  }
+}

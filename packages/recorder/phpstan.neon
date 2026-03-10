@@ -1,0 +1,11 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    level: 10
+    paths:
+        - src
+    excludePaths:
+        - src/database
+        - src/config

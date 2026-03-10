@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+        bootstrap="vendor/autoload.php"
+        colors="true"
+        requireCoverageMetadata="false"
+>
+    <testsuites>
+        <testsuite name="Recorder Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Recorder Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+        <exclude>
+            <directory>src/database</directory>
+            <directory>src/config</directory>
+        </exclude>
+    </source>
+    <coverage>
+        <report>
+            <clover outputFile="build/coverage/clover.xml"/>
+            <html outputDirectory="build/coverage/html"/>
+        </report>
+    </coverage>
+</phpunit>
